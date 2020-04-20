@@ -9,7 +9,7 @@ import traceback
 import re
 import copy
 
-class Admin(commands.Cog):
+class IT(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self._last_result = None
@@ -90,4 +90,4 @@ class Admin(commands.Cog):
             await self.bot.invoke(new_ctx)
 
 def setup(bot):
-    bot.add_cog(Admin(bot))
+    bot.add_cog(IT(bot))
