@@ -3,7 +3,7 @@ from discord.ext import commands
 from discord.utils import get
 from asyncio import sleep as slep
 
-table_list = ['joker_teams', 'joker_users', 'joker_team_results', 'joker_user_results', 'joker_actives']
+table_list = ['joker_teams', 'joker_users', 'joker_team_results', 'joker_user_results']
 
 
 class Tournament(commands.Cog):
