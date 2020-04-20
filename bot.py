@@ -14,9 +14,9 @@ with open(bot.path, 'r') as f:
     bot.utils = json.load(f)
 
 extensions = (
-    'cogs.utility',
     'cogs.tournament',
-    'cogs.admin',
+    'cogs.IT',
+    'cogs.utility',
 )
 
 
