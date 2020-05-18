@@ -9,6 +9,7 @@ import traceback
 import re
 import copy
 
+
 class IT(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
@@ -25,11 +26,6 @@ class IT(commands.Cog):
         if e.text is None:
             return f'```py\n{e.__class__.__name__}: {e}\n```'
         return f'```py\n{e.text}{"^":>{e.offset}}\n{e.__class__.__name__}: {e}```'
-
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        if not message.author.bot:
-            return
 
     @commands.command(hidden=True, name='eval')
     async def _eval(self, ctx, *, body: str):
