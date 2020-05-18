@@ -134,5 +134,5 @@ if __name__ == '__main__':
             print(f'`{extension}` cannot be loaded. [{error}]')
 
 
-bot.run(bot.utils["TOKEN"])
 bot.loop.run_until_complete(create_db_pool())
+bot.run(bot.utils["TOKEN"])
