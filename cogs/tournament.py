@@ -28,30 +28,32 @@ class Tournament(commands.Cog):
         """<reset>::::admin:Direct referential database manipulation."""
         return
 
+    @commands.command(aliases=['dst'])
+    async def daylight(self, ctx):
+        """::::mod:Toggle daylight savings mode."""
+        return
+
     @commands.group(aliases=['t'])
     @commands.has_permissions(ban_members=True)
     async def tourney(self, ctx):
         """<toggle>/<loop>/(board):(activate):::admin:Invoke high-level tournament actions"""
-
-    @commands.group(aliases=['configure', 'cfg'])
-    @commands.has_permissions(kick_members=True)
-    async def config(self, ctx):
-        """<team>/(signups):<add|pop|leader>/(desc)/(switch):<id(s)>::mod:Global configuration command\n\n`>>config team add user_1_id user_2_id . . .`\n`>>config signups description`"""
-        return
 
     @commands.group(aliases=['portal'])
     async def panel(self, ctx):
         """::::mod:Automatically updating administrator panel."""
         return
 
-    @config.group(aliases=['teams', 't'])
+    @commands.group(aliases=['teams'])
+    @commands.has_permissions(kick_members=True)
     async def team(self, ctx):
-        """meat cleaver"""
+        """<add|pop|leader>:<id(s)>:::mod:Configuration command for teams."""
         return
 
-    @config.group(aliases=['su', 'sign', 'signup'])
+    @commands.group(aliases=['su', 'sign', 'signup'])
+    @commands.has_permissions(ban_members=True)
     async def signups(self, ctx):
-        """breet beaver"""
+        """<description|switch>::::admin:Prompts to configure sign-ups interface given a description [`desc`]
+        Prompts to set channel(s) for aggregation [`switch`]"""
         return
 
     @tourney.group(aliases=['leaderboard', 'lb'])
@@ -94,7 +96,7 @@ class Tournament(commands.Cog):
 
     @signups.command(aliases=['description', 'd'])
     async def desc(self, ctx):
-        warning = "**NOTE**: In order to effectively participate in this tournament, you must ensure that I (your overlord robot) am able to send messages to you.\nIf you fail to ensure this simple prerequisite, the hindrance to your overall participation will wholly be on you.\n\n__Be aware of this prior to entry.__"
+        warning = "**NOTE**: In order to effectively participate in this tournament, you must ensure that I (your overlord robot) am able to send messages to you.\nIf you fail to ensure this simple prerequisite, the hindrance to your ability to participate in this event will wholly be on you.\n\n__Be aware of this prior to entry.__\nReact to this message with{}to enter the tournament.".format(get(self.bot.emojis, name='shard'))
         description = await self.prompter(ctx, "Please provide a description for how you'd like your users to sign up.\n\nNote that a warning ensuring my ability to message users will be automatically appended to your description.", 'm.content')
         description = f"{description.content}\n\n{warning}"
         embed = discord.Embed(color=0xBEE5C4, description=description).set_author(name='Sign Up Protocol', icon_url=self.bot.user.avatar_url)
@@ -104,7 +106,7 @@ class Tournament(commands.Cog):
 
     @signups.command(aliases=['sw', 'check'])
     async def switch(self, ctx):
-        channel = await self.prompter(ctx, "Please mention the channel in which you'd like me to aggregate user sign-ups.", 'm.channel_mentions')
+        channel = await self.prompter(ctx, "Please mention the channel in which you'd like me to aggregate user sign-ups.", 'm.channel_mentions') # allow multiple channels to be input
         channel = channel.channel_mentions[0]
         message = await channel.send(embed=self.bot.sign_up_protocol)
         await message.add_reaction(get(self.bot.emojis, name='shard'))
