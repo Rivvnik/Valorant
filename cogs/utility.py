@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord.utils import get
-
+status = '「勇敢な！」'
 
 class Utility(commands.Cog):
     def __init__(self, bot):
@@ -9,10 +9,12 @@ class Utility(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print('----------')
-        print(f'Logged in as {self.bot.user.name}')
-        print(f'Client ID: {self.bot.user.id}')
-        print('----------')
+        await self.bot.change_presence(activity=discord.Streaming(name=status, url='https://twitch.tv/jokerkrush'))
+        print('┌────────────────────────────────────┐')
+        print(f'       Logged in as {self.bot.user.name}')
+        print(f'    Client ID: {self.bot.user.id}')
+        print(f'  Status set to Streaming {status}')
+        print('└────────────────────────────────────┘')
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -49,7 +51,7 @@ class Utility(commands.Cog):
         if not message.author.bot:
             if isinstance(message.channel, discord.DMChannel):  # add an AND statement to this to prevent randoms getting entered into teams
                 team_name = message.content.lower()
-                await self.bot.pg.execute('INSERT INTO joker_teams (active_wins, active_losses, name) VALUES ($1, $1, $2) ON CONFLICT (name) DO NOTHING', 0, team_name)
+                await self.bot.pg.execute('INSERT INTO joker_teams (active_wins, active_losses, name) VALUES ($1, $1, $2) ON CONFLICT (id, name) DO NOTHING', 0, team_name)
                 team_id = await self.bot.pg.fetch('SELECT id FROM joker_teams WHERE name=$1', team_name)
                 await self.bot.pg.execute('UPDATE joker_users SET team_id=$1 WHERE id=$2', team_id[0]['id'], message.channel.recipient.id)
                 region = await self.bot.pg.fetch('SELECT region FROM joker_users WHERE id=$1', message.channel.recipient.id)
