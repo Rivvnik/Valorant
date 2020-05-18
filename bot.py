@@ -50,6 +50,7 @@ async def swapper(ctx, title, description, embed_list: list):
             await message.clear_reactions()
             break
 
+
 bot.swapper = swapper
 
 
@@ -74,13 +75,14 @@ async def EmbedAssembly(member):
                 arguments = arguments + f'{arg} '
             for arg in help_string[5:]:
                 desc = desc + f'{arg}'
+                desc = '{}\nAliases: `{}`, and `{}`.'.format(desc, ", ".join(command.aliases[:-1]), command.aliases[-1]) if len(command.aliases) > 1 else '{}\nAlias: `{}`'.format(desc, command.aliases[0]) if len(command.aliases) == 1 else desc
             mmbed.add_field(name=f'**{command.name}**', value=f'`{str(bot.command_prefix)}{command.name} {arguments.strip()}`\n{desc}', inline=False)
     embeds.append(mmbed)
 
     for cog in bot.cogs:
         embed = discord.Embed(color=0x6000ff, description='For all to use.')
-        if cog == 'Admin':
-            embed.set_author(name='The Help Card - Admin', icon_url=bot.user.avatar_url)
+        if cog == 'IT':
+            embed.set_author(name='The Help Card - Tech Support', icon_url=bot.user.avatar_url)
             embed.description = 'Only Administrators may see and use these commands.'
         elif cog == 'Tournament':
             embed.set_author(name='The Help Card - Tourneys', icon_url=bot.user.avatar_url)
@@ -103,6 +105,7 @@ async def EmbedAssembly(member):
                 arguments = arguments + f'{arg} '
             for arg in help_string[5:]:
                 desc = desc + f'{arg}'
+            desc = '{}\nAliases: `{}`, and `{}`.'.format(desc, ", ".join(command.aliases[:-1]), command.aliases[-1]) if len(command.aliases) > 1 else '{}\nAlias: `{}`'.format(desc, command.aliases[0]) if len(command.aliases) == 1 else desc
             embed.add_field(name=f'**{command.name}**', value=f'`{str(bot.command_prefix)}{command.name} {arguments.strip()}`\n{desc}', inline=False)
         embeds.append(embed)
 
@@ -116,11 +119,12 @@ async def EmbedAssembly(member):
 
 @bot.command(aliases=['h'])
 async def help(ctx):
-    """<command>:::::Seriously?"""
+    """:::::Seriously?"""
     index = 0
     embeds = await EmbedAssembly(ctx.author)
     await ctx.message.delete()
     await bot.swapper(ctx, 'Help', f'`{str(bot.command_prefix)}help` or `{str(bot.command_prefix)}h` to reopen.', embeds)
+
 
 if __name__ == '__main__':
     for extension in extensions:
@@ -129,5 +133,6 @@ if __name__ == '__main__':
         except Exception as error:
             print(f'`{extension}` cannot be loaded. [{error}]')
 
-bot.loop.run_until_complete(create_db_pool())
+
 bot.run(bot.utils["TOKEN"])
+bot.loop.run_until_complete(create_db_pool())
